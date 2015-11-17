@@ -20,7 +20,7 @@ namespace CellularAutomata
                 Console.Clear();
                 grid.Write();
                 grid.Tick();
-                Console.ReadKey();
+                // Console.ReadKey();
             }
         }
     }

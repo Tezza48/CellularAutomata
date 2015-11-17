@@ -12,9 +12,9 @@ namespace CellularAutomata
         private int width = 12;
         private int height = 12;
         private int[,] cellsValues = new int[,] {
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -60,21 +60,7 @@ namespace CellularAutomata
                 for (int y = 0; y < height; y++)
                 {
                     neighbourCount = 0;
-                    for (int i = -1; i < 3; i++)
-                    {
-                        for (int j = -1; j < 3; j++)
-                        {
-                            try
-                            {
-                                if (cells[x + i, y + j].State == 1 && (i + j) == 0)
-                                    neighbourCount++;
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                    }
+                    neighbourCount = CountNeighbours (neighbourCount, x, y);
                     if (cells[x, y].State == 1)
                     {
                         if (neighbourCount < 2)// die
@@ -83,15 +69,37 @@ namespace CellularAutomata
                             newCells[x, y].State = 0;
                         else if (neighbourCount == 2 || neighbourCount == 3)// live
                             newCells[x, y].State = 1;
-                    } else
+                    }
+                    else
                     {
-                    if (neighbourCount == 3)// live
-                        newCells[x, y].State = 1;
+                        if (neighbourCount == 3)// live
+                            newCells[x, y].State = 1;
                     }
 
                 }
             }
             cells = (Cell[,])newCells.Clone();
+        }
+
+        private int CountNeighbours(int neighbourCount, int x, int y)
+        {
+            for (int i = -1; i < 3; i++)
+            {
+                for (int j = -1; j < 3; j++)
+                {
+                    try
+                    {
+                        if (cells[x + i, y + j].State == 1 && (i + j) != 0)
+                            neighbourCount++;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+
+            return neighbourCount;
         }
 
         public void Write()
